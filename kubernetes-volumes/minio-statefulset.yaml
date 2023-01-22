@@ -1,3 +1,12 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: minio
+type: Opaque
+data:
+  MINIO_ACCESS_KEY: YWRtaW4=
+  MINIO_SECRET_KEY: T21lZ2FQYXNzd29yZA==
+---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
