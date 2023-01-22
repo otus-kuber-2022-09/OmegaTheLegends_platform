@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-canary
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: web-canary
+  template:
+    metadata:
+      name: web-canary
+      labels:
+        app: web-canary
+    spec:
+      containers:
+      - name: web-canary
+        image: omegathelegends/otus-web:canary
+        readinessProbe:
+          httpGet:
+            path: /index.html
+            port: 8000
+        livenessProbe:
+          tcpSocket: { port: 8000 }
+        volumeMounts:
+        - name: app
+          mountPath: /app
+      initContainers:
+      - name: initbusy
+        image: busybox:1.31.0
+        command: ['sh', '-c', 'wget -O- https://tinyurl.com/otus-k8s-intro | sh']
+        volumeMounts:
+        - name: app
+          mountPath: /app
+      volumes:
+      - name: app
+        emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-canary
+spec:
+  selector:
+    app: web-canary
+  type: ClusterIP
+  clusterIP: None
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8000
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: web-canary
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/canary: "true"
+    nginx.ingress.kubernetes.io/canary-by-header: "X-CANARY"
+    nginx.ingress.kubernetes.io/canary-by-header-value: "true"
+spec:
+  ingressClassName: nginx
+  rules:
+  - http:
+      paths:
+      - path: /web
+        pathType: Prefix
+        backend:
+          service:
+            name: web-canary
+            port:
+              number: 8000
