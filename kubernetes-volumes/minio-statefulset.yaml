@@ -4,8 +4,8 @@ metadata:
   name: minio
 type: Opaque
 data:
-  MINIO_ACCESS_KEY: YWRtaW4=
-  MINIO_SECRET_KEY: T21lZ2FQYXNzd29yZA==
+  MINIO_ACCESS_KEY: bWluaW8=
+  MINIO_SECRET_KEY: bWluaW8xMjM=
 ---
 apiVersion: apps/v1
 kind: StatefulSet
