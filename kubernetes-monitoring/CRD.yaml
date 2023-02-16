@@ -1,0 +1,16 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: nginx
+  namespace: perebityuk
+  labels:
+    app: nginx
+spec:
+  selector:
+    matchLabels:
+      app: nginx
+  endpoints:
+  - port: mon
+  namespaceSelector:
+    matchNames:
+    -  perebityuk
