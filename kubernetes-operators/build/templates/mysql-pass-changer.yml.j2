@@ -1,0 +1,21 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: pass-changer-{{ name }}-job
+  labels:
+    usage: pass-changer-{{ name }}-job
+spec:
+  template:
+    metadata:
+      name: pass-changer-{{ name }}-job
+    spec:
+      restartPolicy: OnFailure
+      containers:
+      - name: pass-changer-{{ name }}
+        image: {{ image }}
+        imagePullPolicy: IfNotPresent
+        command:
+        - /bin/sh
+        - -c
+        - mysql -u root -h {{ name }} -p{{ old_pass }} mysql -e "ALTER USER root IDENTIFIED BY '{{ new_pass }}', 'root'@'localhost' IDENTIFIED BY '{{ new_pass }}'"
+
