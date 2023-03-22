@@ -1,5 +1,20 @@
 # Project
 
+## Что сделано:
+
+    Поднял кластер через kubeadm
+    Добавлен loadbalancer
+    Поднят микросервис
+    Добавлен default StorageClass на nfs шаре.
+    Выкинут микросервис в интернет с помощью ingress ( ingress nginx от kubernetes ).
+    Добавлен cert-manager
+    Получен сертификат для адреса микросервиса
+    Добавлен istio, весь NS media-server работает через istio.
+    Настроен авто билд контейнера если в репозитории фронтенда прилетают изменения. ( GitLab CI )
+    Контейнер собирается в Runnere в текущем кубере ( используется kaniko ) и улетает в docker hub.
+    Frontend миросвервиса внедрен через ArgoCD в паре с ArgoCD image updater обновляется при появлении нового конейтера.
+
+
 ### Kubernetes установлен на baremetal ( домашние виртуалки ), при помощзь kubeadm, версия 1.26. Сетевой аддон calico, для loadbalancer'ов установлен metallb.
 
 ## metallb
